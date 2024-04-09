@@ -1,74 +1,71 @@
 package model;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import main.status.Status;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import main.util.TaskType;
+import java.util.Objects;
+
 
 public class Epic extends Task {
-    private int epicId;
-    //private int amountSubtasks;
-    //private LocalDateTime startTime;
-    //private Duration duration;
+    private List<Integer> subtaskIds = new ArrayList<>();
 
-    public Epic(String name, String description) {
-        super(name, description);
+    private LocalDateTime endTime;
+
+    public Epic(String description, String name, Status status) {
+        super(description, name, status, LocalDateTime.of(2022,01,01,00,00),0);
+        this.setStartTime(getStartTime());
+        this.endTime = getEndTime();
     }
 
-    //public Epic(String name, String description, LocalDateTime startTime, int durationInMinutes) {
-        //super(name, description);
-        //this.startTime = startTime;
-        //this.duration = Duration.ofMinutes(durationInMinutes);
+    public void setEndTime(LocalDateTime endTime){
+        this.endTime = endTime;
+    }
+
+    @Override
+    public LocalDateTime getEndTime(){
+        return this.getStartTime().plusMinutes(getDuration());
+    }
+
+    public List<Integer> getSubtaskIds() {
+        return subtaskIds;
+    }
+
+    public void addSubtaskIds(int id) {
+        subtaskIds.add(id);
+    }
+
+    public void addSubtaskAllIds(List<Integer> allIds) {
+        this.subtaskIds = allIds;
+    }
+
+    @Override
+    public TaskType getType() { return TaskType.EPIC; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Epic epic = (Epic) o;
+        return Objects.equals(subtaskIds, epic.subtaskIds) && Objects.equals(endTime, epic.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), subtaskIds);
     }
 
     @Override
     public String toString() {
-        return "Epic{" +
-                "name='" + this.getName() + '\'' +
-                ", description='" + this.getDescription() + '\'' +
-                ", epicId=" + epicId +
-                ", id=" + getSuperId() +
-                ", amountSubtasks=" + amountSubtasks +
-                ", status='" + this.getStatus() + '\'' +
-                //", startTime='" + this.getStartTime() + '\'' +
-                //       ", duration='" + this.getDuration() + '\'' +
-                '}';
-    }
-
-    public void setEpicId(int id) {
-        this.epicId = id;
-    }
-
-    public int getEpicId() {
-        return epicId;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    //public Duration getDuration() {
-    //    return duration;
-    //}
-
-    public int getAmountSubtasks() {
-        return amountSubtasks;
-    }
-
-    public void addAmountSubtasks() {
-        this.amountSubtasks++;
-    }
-
-    //public LocalDateTime getEndTime() {
-    //    return startTime.plus(duration);
-    //}
-
-    public boolean isTaskCopyTime(Epic task) {
-        if (startTime == null) {
-            return false;
+        if (getStartTime() != null) {
+            return getId() + "," + TaskType.EPIC + "," + getName() + "," + getStatus() + "," + getDescription() + "," +
+                    getStartTime().format(getFormatter()) + "," + this.getEndTime().format(getFormatter()) + "," + getDuration() + ",\n";
         } else {
-
+            return "startTime = null";
         }
-        return this.startTime.equals(task.startTime);
     }
-
-
 }
+

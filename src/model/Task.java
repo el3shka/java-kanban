@@ -1,28 +1,42 @@
 package model;
 
-import java.time.LocalDateTime;
+import main.status.Status;
+import main.util.TaskType;
+
+import java.time.Duration;
 import java.util.Objects;
 
-public abstract class Task {
-    private static int sumTasks;
-    private String name;
-    private Integer id;
+public class Task {
     private String description;
-    private StatusTask status = StatusTask.NEW;
+    private Integer id;
+    private String name;
+    private Status status;
 
 
-    Task(String name, String description) {
-        this.name = name;
+    public Task(String description, String name, Status status) {
         this.description = description;
-        this.id = sumTasks++;
+        this.name = name;
+        this.status = status;
     }
 
-    public void minusSumTasks() {
-        sumTasks--;
+    public Task(String description, String name, StatusTask status) {
     }
 
-    public Integer getSuperId() {
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -33,30 +47,16 @@ public abstract class Task {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public StatusTask getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StatusTask status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "name='" + name + '\'' +
-                ", id=" + id +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+    public TaskType getType() {
+        return TaskType.TASK;
     }
 
     @Override
@@ -64,28 +64,23 @@ public abstract class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return name.equals(task.name) && Objects.equals(id, task.id) && description.equals(task.description) && status.equals(task.status);
+        return id == task.id && Objects.equals(description, task.description) && Objects.equals(name, task.name) &&
+                status == task.status && Objects.equals(startTime, task.startTime) &&
+                Objects.equals(duration, task.duration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, id, description, status);
+        return Objects.hash(description, id, name, status);
     }
 
-    public boolean isTaskCopy(Task task) {
-        if (this.getName().equals(task.getName()) && this.getDescription().equals(task.getDescription())) {
-            return true;
+    @Override
+    public String toString() {
+        if (startTime != null) {
+            return id + "," + TaskType.TASK + "," + name + "," + status + "," + description + "," +
+                    startTime.format(FORMATTER) + "," + this.getEndTime().format(FORMATTER) + "," + duration + ",\n";
+        } else {
+            return "startTime = null";
         }
-        return false;
-    }
-
-    public abstract LocalDateTime getStartTime();
-
-    public int compareTime(Task task) {
-        if (task.getStartTime() == null && this.getStartTime() == null) return 0;
-        if (task.getStartTime() == null) return -1;
-        if (this.getStartTime() == null) return 1;
-
-        return this.getStartTime().compareTo(task.getStartTime());
     }
 }

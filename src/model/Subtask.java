@@ -1,79 +1,47 @@
 package model;
 
-import java.time.Duration;
+
 import java.time.LocalDateTime;
+import java.util.Objects;
+
 
 public class Subtask extends Task {
+    private final int epicId;
 
-    private int epicId = 0;
-
-
-    public Subtask(String name, String description, int duration) {
-        super(name, description, duration);
-    }
-
-    public Subtask(String name, String description, int duration, LocalDateTime startTime) {
-        super(name, description, duration, startTime);
+    public Subtask(String description, String name, StatusTask status, int epicId) {
+        super(description, name, status);
+        this.epicId = epicId;
     }
 
     public int getEpicId() {
         return epicId;
     }
 
-    public void setEpicId(int epicId) {
-        this.epicId = epicId;
-    }
-}
+    @Override
+    public TaskType getType() { return TaskType.SUBTASK; }
 
-/*
-public class Subtask extends Task{
-    private int subTaskId;
-    private LocalDateTime startTime;
-    private Duration duration;
-
-    public Subtask(String name, String description) {
-        super(name, description);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Subtask subtask = (Subtask) o;
+        return epicId == subtask.epicId;
     }
 
-    public Subtask(String name, String description, StatusTask status) {
-        super(name, description);
-        setStatus(status);
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), epicId);
     }
 
     @Override
     public String toString() {
-        return "SubTask{" +
-                "name='" + this.getName() + '\'' +
-                ", description='" + this.getDescription() + '\'' +
-                ", subTaskId=" + subTaskId +
-                ", id=" + getSuperId() +
-                ", status='" + this.getStatus() + '\'' +
-                ", startTime='" + this.getStartTime() + '\'' +
-                ", duration='" + this.getDuration() + '\'' +
-                '}';
-    }
-
-    public void setSubtaskId(int id) {
-        this.subTaskId = id;
-    }
-
-    public int getSubtaskId() {
-        return subTaskId;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public Duration getDuration() {
-        return duration;
+        if (getStartTime() != null) {
+            return getId() + "," + TaskType.SUBTASK + "," + getName() + "," + getStatus() + "," + getDescription() + "," +
+                    getStartTime().format(getFormatter()) + "," + this.getEndTime().format(getFormatter()) + ","
+                    + getDuration() + "," + epicId + "\n";
+        } else {
+            return "startTime = null";
+        }
     }
 }
