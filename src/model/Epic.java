@@ -5,17 +5,17 @@ import java.time.LocalDateTime;
 
 public class Epic extends Task {
     private int epicId;
-    private int amountSubtasks;
-    private LocalDateTime startTime;
+    //private int amountSubtasks;
+    //private LocalDateTime startTime;
     //private Duration duration;
 
     public Epic(String name, String description) {
         super(name, description);
     }
 
-    public Epic(String name, String description, LocalDateTime startTime, int durationInMinutes) {
-        super(name, description);
-        this.startTime = startTime;
+    //public Epic(String name, String description, LocalDateTime startTime, int durationInMinutes) {
+        //super(name, description);
+        //this.startTime = startTime;
         //this.duration = Duration.ofMinutes(durationInMinutes);
     }
 
