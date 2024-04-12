@@ -14,7 +14,7 @@ public class Manager {
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
 
-    public int generateId() {
+    private int generateId() {
         return ++id;
     }
 
@@ -32,11 +32,12 @@ public class Manager {
         return newEpicId;
     }
 
+
     public int createSubtask(Subtask subtask) {
-        int newSubtaskId = generateId();
-        subtask.setId(newSubtaskId);
-        Epic epic = epics.get(subtask.getEpicId());
-        if (epic != null) {
+        if (epics != null) {
+            int newSubtaskId = generateId();
+            subtask.setId(newSubtaskId);
+            Epic epic = epics.get(subtask.getEpicId());
             subtasks.put(newSubtaskId, subtask);
             epic.setSubtaskIds(newSubtaskId);
             updateStatusEpic(epic);
@@ -46,6 +47,8 @@ public class Manager {
             return -1;
         }
     }
+
+
 
     public void deleteTaskById(int id) {
         if (tasks.containsKey(id)) {
@@ -136,9 +139,14 @@ public class Manager {
         if (epics.containsKey(id)) {
             List<Subtask> subtasksNew = new ArrayList<>();
             Epic epic = epics.get(id);
-            for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
-                subtasksNew.add(subtasks.get(epic.getSubtaskIds().get(i)));
-            }
+            //for (int i = 0; i < epic.getSubtaskIds().size(); i++)
+
+                for (Integer subId : epic.getSubtaskIds())
+                {
+                    subtasksNew.add(subtasks.get(subId));
+                }
+                //subtasksNew.add(subtasks.get(epic.getSubtaskIds().get(i)));
+
             return subtasksNew;
         } else {
             return Collections.emptyList();
@@ -153,6 +161,24 @@ public class Manager {
         }
     }
 
+
+    public void updateEpic(Epic epic) {
+        // Проверяем, содержится ли эпик с указанным id в хранилище
+        if (epics.containsKey(epic.getId())) {
+            // Получаем ссылку на существующий эпик в хранилище
+            Epic existingEpic = epics.get(epic.getId());
+            // Обновляем только поля name и description
+            existingEpic.setName(epic.getName());
+            existingEpic.setDescription(epic.getDescription());
+            // Вызываем метод для обновления статуса эпика
+            updateStatusEpic(existingEpic);
+        } else {
+            // Выводим сообщение об ошибке, если эпик не найден
+            System.out.println("EPIC NOT FOUND");
+        }
+    }
+
+    /*
     public void updateEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
             epics.put(epic.getId(), epic);
@@ -161,19 +187,25 @@ public class Manager {
             System.out.println("EPIC NOT FOUND");
         }
     }
+*/
 
-    public void updateStatusEpic(Epic epic) {
+    private void updateStatusEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
-            if (epic.getSubtaskIds().size() == 0) { //if (epic.getSubtaskIds().isEmpty())
+            if (epic.getSubtaskIds().size() == 0) {
                 epic.setStatus(Status.NEW);
             } else {
                 List<Subtask> subtasksNew = new ArrayList<>();
                 int countDone = 0;
                 int countNew = 0;
 
-                for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
-                    subtasksNew.add(subtasks.get(epic.getSubtaskIds().get(i)));
+                //for (int i = 0; i < epic.getSubtaskIds().size(); i++)
+                for (Integer subId : epic.getSubtaskIds())
+                {
+                    subtasksNew.add(subtasks.get(subId));
                 }
+               // {
+                 //   subtasksNew.add(subtasks.get(epic.getSubtaskIds().get(i)));
+                //}
 
                 for (Subtask subtask : subtasksNew) {
                     if (subtask.getStatus() == Status.DONE) {
@@ -212,7 +244,7 @@ public class Manager {
     }
 
     public void printTasks() {
-        if (tasks.size() == 0) { //isEmpty() ?
+        if (tasks.size() == 0) {
             System.out.println("TASK LIST IS EMPTY");
             return;
         }
@@ -227,7 +259,7 @@ public class Manager {
     }
 
     public void printEpics() {
-        if (epics.size() == 0) {  //isEmpty() ?```````
+        if (epics.size() == 0) {
             System.out.println("EPIC LIST IS EMPTY");
             return;
         }
