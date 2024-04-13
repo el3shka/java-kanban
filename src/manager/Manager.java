@@ -14,6 +14,7 @@ public class Manager {
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
 
+    //Замечение 1 - на проверку
     private int generateId() {
         return ++id;
     }
@@ -33,22 +34,36 @@ public class Manager {
     }
 
 
+    //тут 2 замечания за раз
+    //1. Перенос внутрь if (epic != null), чтобы зря счетчик id не крутить
+    //2. Проверяем равен ли epicId в новой подзадаче со значением epicId подзадачи, которая уже была ранее в хранилище subtasks
     public int createSubtask(Subtask subtask) {
         if (epics != null) {
             int newSubtaskId = generateId();
             subtask.setId(newSubtaskId);
             Epic epic = epics.get(subtask.getEpicId());
-            subtasks.put(newSubtaskId, subtask);
-            epic.setSubtaskIds(newSubtaskId);
-            updateStatusEpic(epic);
+            // Проверяем, есть ли в хранилище уже подзадача с таким epicid
+            boolean isDuplicate = false;
+            for (Subtask s : subtasks.values()) {
+                if (s.equals(subtask)) {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+            if (isDuplicate) {
+                System.out.println("DUPLICATE EPICID");
+            } else {
+                subtasks.put(newSubtaskId, subtask);
+                epic.setSubtaskIds(newSubtaskId);
+                updateStatusEpic(epic);
+            }
+
             return newSubtaskId;
         } else {
             System.out.println("EPIC NOT FOUND");
             return -1;
         }
     }
-
-
 
     public void deleteTaskById(int id) {
         if (tasks.containsKey(id)) {
@@ -139,13 +154,10 @@ public class Manager {
         if (epics.containsKey(id)) {
             List<Subtask> subtasksNew = new ArrayList<>();
             Epic epic = epics.get(id);
-            //for (int i = 0; i < epic.getSubtaskIds().size(); i++)
+            for (Integer subId : epic.getSubtaskIds()) {    //Переделал перебор пот (Integer subid ...)
+                subtasksNew.add(subtasks.get(subId));
+            }
 
-                for (Integer subId : epic.getSubtaskIds())
-                {
-                    subtasksNew.add(subtasks.get(subId));
-                }
-                //subtasksNew.add(subtasks.get(epic.getSubtaskIds().get(i)));
 
             return subtasksNew;
         } else {
@@ -162,6 +174,7 @@ public class Manager {
     }
 
 
+    //еще замечание на проверку.
     public void updateEpic(Epic epic) {
         // Проверяем, содержится ли эпик с указанным id в хранилище
         if (epics.containsKey(epic.getId())) {
@@ -177,36 +190,23 @@ public class Manager {
             System.out.println("EPIC NOT FOUND");
         }
     }
+    
 
-    /*
-    public void updateEpic(Epic epic) {
-        if (epics.containsKey(epic.getId())) {
-            epics.put(epic.getId(), epic);
-            updateStatusEpic(epic);
-        } else {
-            System.out.println("EPIC NOT FOUND");
-        }
-    }
-*/
-
+    //Заприватил метод
     private void updateStatusEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
-            if (epic.getSubtaskIds().size() == 0) {
+            if (epic.getSubtaskIds().isEmpty()) {
                 epic.setStatus(Status.NEW);
             } else {
                 List<Subtask> subtasksNew = new ArrayList<>();
                 int countDone = 0;
                 int countNew = 0;
-
-                //for (int i = 0; i < epic.getSubtaskIds().size(); i++)
+                
                 for (Integer subId : epic.getSubtaskIds())
                 {
                     subtasksNew.add(subtasks.get(subId));
                 }
-               // {
-                 //   subtasksNew.add(subtasks.get(epic.getSubtaskIds().get(i)));
-                //}
-
+                
                 for (Subtask subtask : subtasksNew) {
                     if (subtask.getStatus() == Status.DONE) {
                         countDone++;
@@ -233,6 +233,8 @@ public class Manager {
         }
     }
 
+
+    
     public void updateSubtask(Subtask subtask) {
         if (subtasks.containsKey(subtask.getId())) {
             subtasks.put(subtask.getId(), subtask);
