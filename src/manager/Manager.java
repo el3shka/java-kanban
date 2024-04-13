@@ -89,7 +89,8 @@ public class Manager {
         Subtask subtask = subtasks.get(id);
         if (subtask != null) {
             Epic epic = epics.get(subtask.getEpicId());
-            epic.getSubtaskIds().remove((Integer) subtask.getId());
+            epic.deleteSubtaskId(subtask.getId());      //FIX
+            //epic.getSubtaskIds().remove((Integer) subtask.getId());
             updateStatusEpic(epic);
             subtasks.remove(id);
         } else {
