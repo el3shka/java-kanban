@@ -222,6 +222,7 @@ public class Manager {
     }
 */
     // вроде получилось.....
+    // тут есть сомнения конечно на счет корректности, т.к. глаз уже замылился
     public void updateSubtask(Subtask newSubtask) {
         if (subtasks.containsKey(newSubtask.getId())) {
             Subtask existingSubtask = subtasks.get(newSubtask.getId());
