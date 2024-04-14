@@ -7,14 +7,21 @@ import java.util.*;
 public class Epic extends Task {
     private final List<Integer> subtaskIds = new ArrayList<>();
 
+
     public Epic(String description, String name, Status status) {
         super(description, name, status);
     }
 
     public List<Integer> getSubtaskIds() {
         return new ArrayList<>(subtaskIds); //FIX
-        //return subtaskIds;
     }
+
+    public void deleteAllSubtasks(List<Epic> epics) {
+        subtaskIds.clear();
+        for (Epic epic : epics) {
+            epic.getSubtaskIds().clear();
+        }
+        }
 
     public void setSubtaskIds(int id) {
         subtaskIds.add(id);

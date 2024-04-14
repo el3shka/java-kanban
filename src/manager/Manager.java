@@ -34,30 +34,17 @@ public class Manager {
     }
 
 
-    //тут 2 замечания за раз
-    //1. Перенос внутрь if (epic != null), чтобы зря счетчик id не крутить
-    //2. Проверяем равен ли epicId в новой подзадаче со значением epicId подзадачи, которая уже была ранее в хранилище subtasks
-    public int createSubtask(Subtask subtask) {
-        if (epics != null) {
-            int newSubtaskId = generateId();
-            subtask.setId(newSubtaskId);
-            Epic epic = epics.get(subtask.getEpicId());
-            // Проверяем, есть ли в хранилище уже подзадача с таким epicid
-            boolean isDuplicate = false;
-            for (Subtask s : subtasks.values()) {
-                if (s.equals(subtask)) {
-                    isDuplicate = true;
-                    break;
-                }
-            }
-            if (isDuplicate) {
-                System.out.println("DUPLICATE EPICID");
-            } else {
-                subtasks.put(newSubtaskId, subtask);
-                epic.setSubtaskIds(newSubtaskId);
-                updateStatusEpic(epic);
-            }
 
+    public int createSubtask(Subtask subtask) {
+        // как я понял, получение эпика надо перенести сюда?
+        // проверку на boolean - убрал
+        Epic epic = epics.get(subtask.getEpicId());
+        if (epics != null) {
+        int newSubtaskId = generateId();
+        subtask.setId(newSubtaskId);
+            subtasks.put(newSubtaskId, subtask);
+            epic.setSubtaskIds(newSubtaskId);
+            updateStatusEpic(epic);
             return newSubtaskId;
         } else {
             System.out.println("EPIC NOT FOUND");
@@ -90,7 +77,6 @@ public class Manager {
         if (subtask != null) {
             Epic epic = epics.get(subtask.getEpicId());
             epic.deleteSubtaskId(subtask.getId());      //FIX
-            //epic.getSubtaskIds().remove((Integer) subtask.getId());
             updateStatusEpic(epic);
             subtasks.remove(id);
         } else {
@@ -107,14 +93,6 @@ public class Manager {
         epics.clear();
     }
 
-    public void deleteAllSubtasks() {
-        subtasks.clear();
-        for (Epic epic : epics.values()) {
-            epic.getSubtaskIds().clear();
-            updateStatusEpic(epic);
-        }
-    }
-
     public Task getTaskById(int id) {
         return tasks.get(id);
     }
@@ -128,7 +106,7 @@ public class Manager {
     }
 
     public List<Task> getAllTasks() {
-        if (tasks.size() == 0) {
+        if (tasks.isEmpty()) {
             System.out.println("TASK LIST IS EMPTY");
             return Collections.emptyList();
         }
@@ -136,7 +114,7 @@ public class Manager {
     }
 
     public List<Epic> getAllEpics() {
-        if (epics.size() == 0) {
+        if (epics.isEmpty()) {
             System.out.println("EPIC LIST IS EMPTY");
             return Collections.emptyList();
         }
@@ -144,7 +122,7 @@ public class Manager {
     }
 
     public List<Subtask> getAllSubtasks() {
-        if (subtasks.size() == 0) {
+        if (subtasks.isEmpty()) {
             System.out.println("SUBTASKS LIST IS EMPTY");
             return Collections.emptyList();
         }
@@ -158,8 +136,6 @@ public class Manager {
             for (Integer subId : epic.getSubtaskIds()) {    //Переделал перебор пот (Integer subid ...)
                 subtasksNew.add(subtasks.get(subId));
             }
-
-
             return subtasksNew;
         } else {
             return Collections.emptyList();
@@ -191,7 +167,6 @@ public class Manager {
             System.out.println("EPIC NOT FOUND");
         }
     }
-    
 
     //Заприватил метод
     private void updateStatusEpic(Epic epic) {
@@ -202,12 +177,12 @@ public class Manager {
                 List<Subtask> subtasksNew = new ArrayList<>();
                 int countDone = 0;
                 int countNew = 0;
-                
+
                 for (Integer subId : epic.getSubtaskIds())
                 {
                     subtasksNew.add(subtasks.get(subId));
                 }
-                
+
                 for (Subtask subtask : subtasksNew) {
                     if (subtask.getStatus() == Status.DONE) {
                         countDone++;
@@ -234,20 +209,35 @@ public class Manager {
         }
     }
 
-
-    
+    //пока оставил старый код...
+    /*
     public void updateSubtask(Subtask subtask) {
         if (subtasks.containsKey(subtask.getId())) {
             subtasks.put(subtask.getId(), subtask);
             Epic epic = epics.get(subtask.getEpicId());
             updateStatusEpic(epic);
         } else {
-            System.out.println("SUBTASK NOT FOUND");
+            System.out.println("Subtask not found");
+        }
+    }
+*/
+    // вроде получилось.
+    public void updateSubtask(Subtask newSubtask) {
+        if (subtasks.containsKey(newSubtask.getId())) {
+            Subtask existingSubtask = subtasks.get(newSubtask.getId());
+            if (existingSubtask.getEpicId() != newSubtask.getEpicId()) {
+                System.out.println("Epic id already exists in another subtask");
+            } else {
+                existingSubtask.setStatus(Status.IN_PROGRESS);
+                System.out.println("Subtask updated successfully");
+            }
+        } else {
+            System.out.println("Subtask not found");
         }
     }
 
     public void printTasks() {
-        if (tasks.size() == 0) {
+        if (tasks.isEmpty()) {
             System.out.println("TASK LIST IS EMPTY");
             return;
         }
@@ -262,7 +252,7 @@ public class Manager {
     }
 
     public void printEpics() {
-        if (epics.size() == 0) {
+        if (epics.isEmpty()) {
             System.out.println("EPIC LIST IS EMPTY");
             return;
         }
@@ -278,7 +268,7 @@ public class Manager {
     }
 
     public void printSubtasks() {
-        if (subtasks.size() == 0) {
+        if (subtasks.isEmpty()) {
             System.out.println("SUBTASKS LIST IS EMPTY");
             return;
         }

@@ -36,6 +36,7 @@ public class Main {
         System.out.println(">>> CREATING EPIC <<<");
         manager.createEpic(new Epic("Description-1", "Epic-1", Status.NEW));
         manager.createEpic(new Epic("Description-2", "Epic-2", Status.NEW));
+        manager.createEpic(new Epic("Description-2", "Epic-3", Status.NEW));
         manager.printEpics();
         System.out.println(">>> GETTING ALL EPICS <<<");
         List<Epic> epics = manager.getAllEpics();
@@ -64,14 +65,13 @@ public class Main {
         List<Subtask> subtasks = manager.getAllSubtasks();
         System.out.println(subtasks);
         System.out.println(">>> GETTING SUBTASK BY ID <<<");
-        Subtask subtask = manager.getSubtaskById(5);
+        Subtask subtask = manager.getSubtaskById(7);
         System.out.println(subtask);
         System.out.println(">>> UPDATING SUBTASK <<<");
         subtask.setStatus(Status.IN_PROGRESS);
         manager.updateSubtask(subtask);
         System.out.println(subtask);
         System.out.println();
-
         System.out.println("!!! DELETING !!!");
         System.out.println(">>> DELETING TASK BY ID <<<");
         manager.deleteTaskById(1);
@@ -83,7 +83,7 @@ public class Main {
         manager.deleteSubtaskById(5);
         manager.printSubtasks();
         System.out.println(">>> DELETING ALL SUBTASKS <<<");
-        manager.deleteAllSubtasks();
+        epic.deleteAllSubtasks(epics);
         manager.printSubtasks();
         System.out.println(">>> DELETING EPIC BY ID <<<");
         manager.deleteEpicById(4);
@@ -91,6 +91,16 @@ public class Main {
         System.out.println(">>> DELETING ALL EPICS <<<");
         manager.deleteAllEpics();
         manager.printEpics();
+
+        /*
+        Subtask subtaskToUpdate = manager.getSubtaskById(subtask.getId());
+        if (subtaskToUpdate != null) {
+            subtaskToUpdate.setStatus(Status.IN_PROGRESS);
+            manager.updateSubtask(subtaskToUpdate);
+        } else {
+            System.out.println("Subtask not found");
+        }
+         */
 
     }
 }
