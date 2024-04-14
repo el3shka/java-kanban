@@ -65,7 +65,7 @@ public class Main {
         List<Subtask> subtasks = manager.getAllSubtasks();
         System.out.println(subtasks);
         System.out.println(">>> GETTING SUBTASK BY ID <<<");
-        Subtask subtask = manager.getSubtaskById(7);
+        Subtask subtask = manager.getSubtaskById(6);
         System.out.println(subtask);
         System.out.println(">>> UPDATING SUBTASK <<<");
         subtask.setStatus(Status.IN_PROGRESS);

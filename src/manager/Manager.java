@@ -106,7 +106,7 @@ public class Manager {
     }
 
     public List<Task> getAllTasks() {
-        if (tasks.isEmpty()) {
+        if (tasks.size() == 0) {
             System.out.println("TASK LIST IS EMPTY");
             return Collections.emptyList();
         }
@@ -114,7 +114,7 @@ public class Manager {
     }
 
     public List<Epic> getAllEpics() {
-        if (epics.isEmpty()) {
+        if (epics.size() == 0) {
             System.out.println("EPIC LIST IS EMPTY");
             return Collections.emptyList();
         }
@@ -122,7 +122,7 @@ public class Manager {
     }
 
     public List<Subtask> getAllSubtasks() {
-        if (subtasks.isEmpty()) {
+        if (subtasks.size() == 0) {
             System.out.println("SUBTASKS LIST IS EMPTY");
             return Collections.emptyList();
         }
@@ -171,7 +171,7 @@ public class Manager {
     //Заприватил метод
     private void updateStatusEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
-            if (epic.getSubtaskIds().isEmpty()) {
+            if (epic.getSubtaskIds().size() == 0) {
                 epic.setStatus(Status.NEW);
             } else {
                 List<Subtask> subtasksNew = new ArrayList<>();
@@ -237,7 +237,7 @@ public class Manager {
     }
 
     public void printTasks() {
-        if (tasks.isEmpty()) {
+        if (tasks.size() == 0) {
             System.out.println("TASK LIST IS EMPTY");
             return;
         }
@@ -252,7 +252,7 @@ public class Manager {
     }
 
     public void printEpics() {
-        if (epics.isEmpty()) {
+        if (epics.size() == 0) {
             System.out.println("EPIC LIST IS EMPTY");
             return;
         }
@@ -268,7 +268,7 @@ public class Manager {
     }
 
     public void printSubtasks() {
-        if (subtasks.isEmpty()) {
+        if (subtasks.size() == 0) {
             System.out.println("SUBTASKS LIST IS EMPTY");
             return;
         }
