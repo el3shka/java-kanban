@@ -216,7 +216,7 @@ public class Manager {
     }
 
     // вроде получилось.
-    // обновление подзадачи
+    // обновление подзадачи, я вроде правильно понял и теперь точно допилил, верно?)
     public void updateSubtask(Subtask newSubtask) {
         if (subtasks.containsKey(newSubtask.getId())) {
             Subtask existingSubtask = subtasks.get(newSubtask.getId());
