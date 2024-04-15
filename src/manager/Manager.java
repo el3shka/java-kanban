@@ -209,20 +209,8 @@ public class Manager {
         }
     }
 
-    //пока оставил старый код...
-    /*
-    public void updateSubtask(Subtask subtask) {
-        if (subtasks.containsKey(subtask.getId())) {
-            subtasks.put(subtask.getId(), subtask);
-            Epic epic = epics.get(subtask.getEpicId());
-            updateStatusEpic(epic);
-        } else {
-            System.out.println("Subtask not found");
-        }
-    }
-*/
-    // вроде получилось.....
-    // тут есть сомнения конечно на счет корректности, т.к. глаз уже замылился
+
+    // вроде получилось.
     public void updateSubtask(Subtask newSubtask) {
         if (subtasks.containsKey(newSubtask.getId())) {
             Subtask existingSubtask = subtasks.get(newSubtask.getId());
@@ -236,6 +224,7 @@ public class Manager {
             System.out.println("Subtask not found");
         }
     }
+
 
     public void printTasks() {
         if (tasks.size() == 0) {

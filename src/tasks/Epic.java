@@ -16,12 +16,10 @@ public class Epic extends Task {
         return new ArrayList<>(subtaskIds); //FIX
     }
 
-    public void deleteAllSubtasks(List<Epic> epics) {
+    //тогда думаю так верно будет очистить все хранилище.
+    public void deleteAllSubtasks() {
         subtaskIds.clear();
-        for (Epic epic : epics) {
-            epic.getSubtaskIds().clear();
-        }
-        }
+    }
 
     public void setSubtaskIds(int id) {
         subtaskIds.add(id);
