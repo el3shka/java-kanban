@@ -16,7 +16,7 @@ public class Epic extends Task {
         return new ArrayList<>(subtaskIds); //FIX
     }
 
-    //тогда думаю так верно будет очистить все хранилище.
+    //значит должно быть таким очищение хранилища и все.
     public void deleteAllSubtasks() {
         subtaskIds.clear();
     }
