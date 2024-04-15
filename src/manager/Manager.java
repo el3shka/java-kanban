@@ -93,6 +93,12 @@ public class Manager {
         epics.clear();
     }
 
+    //Значит должно быть таким очищение хранилища и все.
+    //По моему мнению должно быть тут, т.к. все манипуляции с удалением и прочим у меня в менеджере
+    public void deleteAllSubtasks() {
+        subtasks.clear();
+    }
+
     public Task getTaskById(int id) {
         return tasks.get(id);
     }
@@ -209,15 +215,17 @@ public class Manager {
         }
     }
 
-
     // вроде получилось.
+    // обновление подзадачи
     public void updateSubtask(Subtask newSubtask) {
         if (subtasks.containsKey(newSubtask.getId())) {
             Subtask existingSubtask = subtasks.get(newSubtask.getId());
             if (existingSubtask.getEpicId() != newSubtask.getEpicId()) {
                 System.out.println("Epic id already exists in another subtask");
             } else {
-                existingSubtask.setStatus(Status.IN_PROGRESS);
+                    subtasks.put(newSubtask.getId(), newSubtask);
+                    Epic epic = epics.get(newSubtask.getEpicId());
+                    updateStatusEpic(epic);
                 System.out.println("Subtask updated successfully");
             }
         } else {

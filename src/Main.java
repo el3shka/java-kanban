@@ -83,7 +83,7 @@ public class Main {
         manager.deleteSubtaskById(5);
         manager.printSubtasks();
         System.out.println(">>> DELETING ALL SUBTASKS <<<");
-        epic.deleteAllSubtasks();
+        manager.deleteAllSubtasks();
         manager.printSubtasks();
         System.out.println(">>> DELETING EPIC BY ID <<<");
         manager.deleteEpicById(4);

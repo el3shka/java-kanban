@@ -16,11 +16,6 @@ public class Epic extends Task {
         return new ArrayList<>(subtaskIds); //FIX
     }
 
-    //значит должно быть таким очищение хранилища и все.
-    public void deleteAllSubtasks() {
-        subtaskIds.clear();
-    }
-
     public void setSubtaskIds(int id) {
         subtaskIds.add(id);
     }
@@ -53,4 +48,6 @@ public class Epic extends Task {
                 ", status=" + getStatus() +
                 '}';
     }
+
+
 }
