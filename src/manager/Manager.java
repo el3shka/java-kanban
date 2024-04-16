@@ -94,7 +94,9 @@ public class Manager {
     }
 
     public void deleteAllSubtasks() {
-      //  subtasks.clear(); // эта строка ведь не нужна уже, т.к. в Epic у нас есть метод очищения и далее мы вызываем его ниже, верно?
+        // как говорится - "зур рэхмэт" за объяснения!
+        // вернул обратно, теперь понял зачем ее тут тоже оставлять :)
+        subtasks.clear();
         for (Epic epic : epics.values()) {
             epic.deleteAllSubtasks();
             updateStatusEpic(epic);
