@@ -93,10 +93,12 @@ public class Manager {
         epics.clear();
     }
 
-    //Значит должно быть таким очищение хранилища и все.
-    //По моему мнению должно быть тут, т.к. все манипуляции с удалением и прочим у меня в менеджере
     public void deleteAllSubtasks() {
-        subtasks.clear();
+      //  subtasks.clear(); // эта строка ведь не нужна уже, т.к. в Epic у нас есть метод очищения и далее мы вызываем его ниже, верно?
+        for (Epic epic : epics.values()) {
+            epic.deleteAllSubtasks();
+            updateStatusEpic(epic);
+        }
     }
 
     public Task getTaskById(int id) {
