@@ -1,62 +1,110 @@
 package service;
 
 import model.Task;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class InMemoryHistoryManager implements HistoryManager {
+    private final Map<Integer, Node> historyTask = new HashMap<>();
+    private Node head;
+    private Node tail;
 
-class InMemoryHistoryManagerTest {
-
-    @DisplayName("HistoryManager don't change task")
-    @Test
-    void shouldBeTaskInHistoryWithoutChanges() {
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        Task task = new Task("a", "b");
-        historyManager.add(task);
-        List<Task> history = historyManager.getHistory();
-        assertEquals(task, history.get(0), "HistoryManager is not allowed to modify the task");
+    @Override
+    public List<Task> getHistory() {
+        return getTasks();
     }
 
-    @DisplayName("Don't add duplicate")
-    @Test
-    void shouldBeReturnSize1IfAddTheSameTask() {
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task("a", "b");
-        historyManager.add(task1);
-        historyManager.add(task1);
-        assertEquals(1, historyManager.getHistory().size());
+    @Override
+    public void add(Task task) {
+        if (task != null) {
+            int id = task.getId();
+            Node tempNode = historyTask.get(id);
+
+            if (tempNode != null) {
+                remove(id);
+            }
+
+            Node nodeToAdd = linkLast(task);
+            historyTask.put(id, nodeToAdd);
+        }
     }
 
-    @DisplayName("Chronology list returned")
-    @Test
-    void shouldBeReturnArrayListChronologyHistory() {
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task("Task1", "Desc1");
-        Task task2 = new Task("Task2", "Desc2");
-        Task task3 = new Task("Task3", "Desc3");
-        task1.setId(1);
-        task2.setId(2);
-        task3.setId(3);
-        historyManager.add(task1);             // head
-        historyManager.add(task2);             // medium
-        historyManager.add(task3);             // tail            [task1, task2, task3]
-        historyManager.remove(task1.getId());  // delete head     [task2, task3]
-        historyManager.add(task1);             // new tail        [task2, task3, task1]
-        historyManager.remove(task3.getId());  // delete medium   [task2, task1]
-        historyManager.add(task3);             // add tail        [task2, task1, task3]
-        historyManager.remove(task3.getId());  // remove tail     [task2, task1]
-        List<Task> histFromManager = historyManager.getHistory();
+    @Override
+    public void remove(int id) {
+        Node nodeToRemove = historyTask.get(id);
 
-        List<Task> hist = new ArrayList<>();
-        hist.add(task2);
-        hist.add(task1);
-        assertEquals(hist, histFromManager);
-
+        if (nodeToRemove != null) {
+            removeNode(nodeToRemove);
+            historyTask.remove(id);
+        }
     }
 
+    private Node linkLast(Task task) {
+        Node newNode = new Node(null, task, null);
 
+        if (head == null) {
+            head = newNode;
+        } else if (tail == null) {
+            tail = newNode;
+            newNode.prev = head;
+            head.next = tail;
+        } else {
+            Node oldTail = tail;
+            tail = newNode;
+            oldTail.next = tail;
+            tail.prev = oldTail;
+        }
+        return newNode;
+    }
+
+    private void removeNode(Node node) {
+        Node prevNode;
+        Node nextNode;
+
+        if (node == head) {
+
+            if (head.next != null) {
+                head = node.next;
+                head.prev = null;
+            } else {
+                head = null;
+            }
+
+        } else if (node == tail) {
+            tail = node.prev;
+            tail.next = null;
+        } else {
+            prevNode = node.prev;
+            nextNode = node.next;
+            prevNode.next = nextNode;
+            nextNode.prev = prevNode;
+        }
+    }
+
+    private List<Task> getTasks() {
+        List<Task> tasksInHistory = new ArrayList<>(historyTask.size());
+        Node tempNode = head;
+
+        while (tempNode != null) {
+            tasksInHistory.add(tempNode.task);
+            tempNode = tempNode.next;
+        }
+
+        return tasksInHistory;
+    }
+
+    private static class Node {
+        public Task task;
+        public Node prev;
+        public Node next;
+
+        Node(Node prev, Task task, Node next) {
+            this.prev = prev;
+            this.task = task;
+            this.next = next;
+        }
+    }
 }
