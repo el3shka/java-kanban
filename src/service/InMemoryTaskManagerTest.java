@@ -19,7 +19,7 @@ class InMemoryTaskManagerTest {
         manager.createTask(task);
         Epic epic = new Epic("a", "b");
         manager.createEpic(epic);
-        Subtask subtask = new Subtask("a", "b", epic);
+        Subtask subtask = new Subtask("a", "b", epic.getId());
         manager.createSubtask(subtask);
     }
 
@@ -79,5 +79,4 @@ class InMemoryTaskManagerTest {
         manager.removeEpic(2);
         assertNull(manager.getEpic(2), "Epic not removed");
     }
-
 }
