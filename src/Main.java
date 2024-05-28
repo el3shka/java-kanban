@@ -9,10 +9,7 @@ import service.TaskManager;
 
 public class Main {
     private static FileBackedTaskManager manager;
-
-    public Main() {
-    }
-
+    
     public static void main(String[] args) {
         System.out.println(">>> !!!!! СТАРТУЕМ !!!!! <<<");
         manager = Managers.getFileBackedTaskManager();
