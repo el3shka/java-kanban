@@ -1,56 +1,86 @@
-import model.*;
-import service.InMemoryTaskManager;
-import service.Managers;
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
 
-//new branch version
+import java.io.File;
+import java.util.Iterator;
+import model.Epic;
+import model.Subtask;
+import model.Task;
+import service.FileBackedTaskManager;
+import service.Managers;
+import service.TaskManager;
+
 public class Main {
-    private static InMemoryTaskManager manager;
+    private static FileBackedTaskManager manager;
+
+    public Main() {
+    }
 
     public static void main(String[] args) {
         System.out.println(">>> !!!!! СТАРТУЕМ !!!!! <<<");
-
-        manager = Managers.getDefault();
+        manager = Managers.getFileBackedTaskManager();
         addAllTask();
         printAllTasks();
+        System.setProperty("file.encoding", "UTF-8");
+        File fileBackup = new File("resources/backup_output.csv");
+        TaskManager loadFromFileManager = FileBackedTaskManager.loadFromFile(fileBackup);
+        System.out.println(">>> !!!!! КОНЕЦ !!!!! <<<");
     }
 
     private static void addAllTask() {
         Task buySock = new Task("Купить носки в подарок", "Носков не нашлось :(");
         manager.createTask(buySock);
-
         Task makeDinner = new Task("Приготовить ужин", "Время ужина");
         manager.createTask(makeDinner);
-
         Epic goToShop = new Epic("Сходить в магазин", "Купить продукты");
         manager.createEpic(goToShop);
-
-        Subtask buyMilk = new Subtask("Купить молоко", "Молока нет", goToShop);
-        Subtask buyMeat = new Subtask("Купить мясо", "Кончилось мясо", goToShop);
+        Subtask buyMilk = new Subtask("Купить молоко", "Молока нет", 3);
+        Subtask buyMeat = new Subtask("Купить мясо", "Кончилось мясо", 3);
         manager.createSubtask(buyMilk);
         manager.createSubtask(buyMeat);
     }
 
     private static void printAllTasks() {
         System.out.println("Список задач:");
-        for (Task task : manager.getAllTasks()) {
+        Iterator var0 = manager.getAllTasks().iterator();
+
+        Task task;
+        while(var0.hasNext()) {
+            task = (Task)var0.next();
             System.out.println(task);
         }
-        System.out.println("Список эпиков:");
-        for (Epic epic : manager.getAllEpics()) {
-            System.out.println(epic);
 
-            for (Task task : manager.getSubtasksByEpic(epic)) {
-                System.out.println("=====> " + task);
+        System.out.println("Список эпиков:");
+        var0 = manager.getAllEpics().iterator();
+
+        while(var0.hasNext()) {
+            Epic epic = (Epic)var0.next();
+            System.out.println(epic);
+            Iterator var2 = manager.getSubtasksByEpic(epic).iterator();
+
+            while(var2.hasNext()) {
+                Task task = (Task)var2.next();
+                System.out.println("=====> " + String.valueOf(task));
             }
         }
+
         System.out.println("Список подзадач:");
-        for (Task subtask : manager.getAllSubtasks()) {
-            System.out.println(subtask);
+        var0 = manager.getAllSubtasks().iterator();
+
+        while(var0.hasNext()) {
+            task = (Task)var0.next();
+            System.out.println(task);
         }
 
         System.out.println("Получаем историю:");
-        for (Task task : manager.historyManager.getHistory()) {
+        var0 = manager.historyManager.getHistory().iterator();
+
+        while(var0.hasNext()) {
+            task = (Task)var0.next();
             System.out.println(task);
         }
+
     }
 }
