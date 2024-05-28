@@ -32,5 +32,6 @@ class ManagersTest {
                 "Managers не вернул InMemoryTaskManager из getDefault");
         Assertions.assertEquals(testTaskManager.allEpics, taskManager.allEpics,
                 "Managers не вернул InMemoryTaskManager из getDefault");
+
     }
 }

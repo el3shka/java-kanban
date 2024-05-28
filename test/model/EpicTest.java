@@ -20,12 +20,12 @@ class EpicTest {
         subtask.setId(2);
     }
 
-    @DisplayName("Epics with the same id - equals")
+    @DisplayName("Эпик с таким же id - существует")
     @Test
     void shouldBeEqualsEpicsWithTheSameId() {
         Epic testEpic = new Epic("z", "x");
         testEpic.setId(epic.getId());
-        Assertions.assertEquals(epic, testEpic, "Epics with the same id not equal");
+        Assertions.assertEquals(epic, testEpic, "Эпики с одинаковым id не равны");
     }
 
     @DisplayName("Epic not be subtask yourself")
@@ -33,7 +33,7 @@ class EpicTest {
     void shouldFalseIfEpicIsSubtaskYourself() {
         epic.addSubtaskId(epic.getId());
         List<Integer> result = epic.getSubtaskIds();
-        Assertions.assertFalse(result.contains(epic.getId()), "Epic not allow be subtask yourself");
+        Assertions.assertFalse(result.contains(epic.getId()), "Эпик не может быть сабтаском");
     }
 
 }

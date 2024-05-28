@@ -1,14 +1,11 @@
-import model.Epic;
-import model.Subtask;
-import model.Task;
-import service.FileBackedTaskManager;
-import service.Managers;
+
+import model.*;
 import service.TaskManager;
-
-import java.io.File;
-
+import service.Managers;
+import service.FileBackedTaskManager;
+//new branch version
 public class Main {
-    private static FileBackedTaskManager manager;
+    private static InMemoryTaskManager manager;
 
     public static void main(String[] args) {
         System.out.println(">>> !!!!! СТАРТУЕМ !!!!! <<<");
@@ -21,6 +18,9 @@ public class Main {
 
         TaskManager loadFromFileManager = FileBackedTaskManager.loadFromFile(fileBackup);
         System.out.println(">>> !!!!! КОНЕЦ !!!!! <<<");
+        manager = Managers.getDefault();
+        addAllTask();
+        printAllTasks();
     }
 
     private static void addAllTask() {

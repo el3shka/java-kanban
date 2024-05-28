@@ -16,7 +16,7 @@ class SubtaskTest {
         subtask.setId(2);
     }
 
-    @DisplayName("Подзадачи с одинаковыми ID - уже существуют")
+    @DisplayName("Сабтаск с таким же id - существует")
     @Test
     void shouldBeEqualsSubtaskWithTheSameId() {
         Epic tempEpic = new Epic("b", "d");
@@ -24,13 +24,13 @@ class SubtaskTest {
         Subtask testSubtask = new Subtask("z", "x", 3);
         testSubtask.setId(2);
 
-        Assertions.assertEquals(subtask, testSubtask, "Subtask with the same id not equal");
+        Assertions.assertEquals(subtask, testSubtask, "Подзадачи с одинаковым id не равны");
     }
 
     @DisplayName("Subtask id not be epic yourself id")
     @Test
     void shouldNotEqualsSubtaskIdAndEpicId() {
         subtask.setId(1);
-        Assertions.assertNotEquals(subtask.getEpicId(), subtask.getId(), "Subtask not allow be epic yourself");
+        Assertions.assertNotEquals(subtask.getEpicId(), subtask.getId(), "Подзадача не может быть эпиком");
     }
 }
