@@ -1,86 +1,65 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
-import java.io.File;
-import java.util.Iterator;
-import model.Epic;
-import model.Subtask;
-import model.Task;
-import service.FileBackedTaskManager;
-import service.Managers;
-import service.TaskManager;
-
+import managers.InMemoryTaskManager;
+import managers.TaskManager;
+import models.Epic;
+import models.Status;
+import models.Subtask;
+import models.Task;
 public class Main {
-    private static FileBackedTaskManager manager;
-
-    public Main() {
-    }
 
     public static void main(String[] args) {
         System.out.println(">>> !!!!! СТАРТУЕМ !!!!! <<<");
-        manager = Managers.getFileBackedTaskManager();
-        addAllTask();
-        printAllTasks();
-        System.setProperty("file.encoding", "UTF-8");
-        File fileBackup = new File("resources/backup_output.csv");
-        TaskManager loadFromFileManager = FileBackedTaskManager.loadFromFile(fileBackup);
-        System.out.println(">>> !!!!! КОНЕЦ !!!!! <<<");
+        TaskManager taskManager = new InMemoryTaskManager();
+        Task task1 =new Task("Первая", "Описание первой задачи");
+        taskManager.createTask(task1);
+        Task task2 =new Task("Вторая", "Описание второй задачи");
+        taskManager.createTask(task2);
+        Epic epic1 =new Epic("Первый Эпик", "Описание первого эпика");
+        Epic epic2 =new Epic("Второй Эпик", "Описание второго эпика");
+        Integer id1 = taskManager.createEpic(epic1);
+        Integer id2 = taskManager.createEpic(epic2);
+        printAllTasks(taskManager);
+        Subtask sub1 = new Subtask("Подзадача_1", "Описание Подзадача_1", id1);
+        taskManager.createSubtask(sub1);
+        Subtask sub2 = new Subtask("Подзадача_2", "Описание Подзадача_2", id1);
+        taskManager.createSubtask(sub2);
+        Subtask sub3 = new Subtask("Подзадача_3", "Описание Подзадача_3", id2);
+        taskManager.createSubtask(sub3);
+        System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubTasks());
+        printAllTasks(taskManager);
+        System.out.println(epic2.getTaskStatus());
+        sub3.setTaskStatus(Status.IN_PROGRESS);
+        taskManager.updateSubtask(sub3);
+        System.out.println(epic2.getTaskStatus());
+        sub3.setTaskStatus(Status.DONE);
+        taskManager.updateSubtask(sub3);
+        System.out.println(epic2.getTaskStatus());
+        taskManager.deleteSubtask(sub3.getId());
+        System.out.println(epic2.getTaskStatus());
+        printAllTasks(taskManager);
     }
-
-    private static void addAllTask() {
-        Task buySock = new Task("Купить носки в подарок", "Носков не нашлось :(");
-        manager.createTask(buySock);
-        Task makeDinner = new Task("Приготовить ужин", "Время ужина");
-        manager.createTask(makeDinner);
-        Epic goToShop = new Epic("Сходить в магазин", "Купить продукты");
-        manager.createEpic(goToShop);
-        Subtask buyMilk = new Subtask("Купить молоко", "Молока нет", 3);
-        Subtask buyMeat = new Subtask("Купить мясо", "Кончилось мясо", 3);
-        manager.createSubtask(buyMilk);
-        manager.createSubtask(buyMeat);
-    }
-
-    private static void printAllTasks() {
+    private static void printAllTasks(TaskManager manager) {
         System.out.println("Список задач:");
-        Iterator var0 = manager.getAllTasks().iterator();
-
-        Task task;
-        while(var0.hasNext()) {
-            task = (Task)var0.next();
+        for (Task task : manager.getAllTasks()) {
             System.out.println(task);
         }
-
         System.out.println("Список эпиков:");
-        var0 = manager.getAllEpics().iterator();
-
-        while(var0.hasNext()) {
-            Epic epic = (Epic)var0.next();
+        for (Task epic : manager.getAllEpics()) {
             System.out.println(epic);
-            Iterator var2 = manager.getSubtasksByEpic(epic).iterator();
 
-            while(var2.hasNext()) {
-                Task task = (Task)var2.next();
-                System.out.println("=====> " + String.valueOf(task));
+            for (Task task : manager.getSubtasksByEpic((Epic) epic)) {
+                System.out.println("=====>>>>> " + task);
             }
         }
-
         System.out.println("Список подзадач:");
-        var0 = manager.getAllSubtasks().iterator();
-
-        while(var0.hasNext()) {
-            task = (Task)var0.next();
-            System.out.println(task);
+        for (Task subtask : manager.getAllSubTasks()) {
+            System.out.println(subtask);
         }
 
         System.out.println("Получаем историю:");
-        var0 = manager.historyManager.getHistory().iterator();
-
-        while(var0.hasNext()) {
-            task = (Task)var0.next();
+        for (Task task : manager.getHistory()) {
             System.out.println(task);
         }
-
     }
 }
