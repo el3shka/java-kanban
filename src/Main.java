@@ -46,6 +46,7 @@ public class Main {
             System.out.println(epic);
 
             for (Task task : manager.getSubtasksByEpic(epic)) {
+
                 System.out.println("=====> " + task);
             }
         }
