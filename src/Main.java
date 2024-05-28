@@ -2,7 +2,6 @@ import model.*;
 import service.FileBackedTaskManager;
 import service.Managers;
 import service.TaskManager;
-
 import java.io.File;
 
 public class Main {
@@ -14,7 +13,6 @@ public class Main {
         manager = Managers.getFileBackedTaskManager();
         addAllTask();
         printAllTasks();
-        System.setProperty("file.encoding", "UTF-8");
         File fileBackup = new File("resources/backup_output.csv");
 
         TaskManager loadFromFileManager = FileBackedTaskManager.loadFromFile(fileBackup);
