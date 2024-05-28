@@ -23,7 +23,7 @@ class InMemoryTaskManagerTest {
         manager.createSubtask(subtask);
     }
 
-    @DisplayName("Возврат корректировки id")
+    @DisplayName("Return correct id")
     @Test
     void shouldReturnIdCreatedTasks() {
         assertEquals(1, manager.getTask(1).getId(), "Id task not 1");
@@ -31,7 +31,7 @@ class InMemoryTaskManagerTest {
         assertEquals(3, manager.getSubtask(3).getId(), "Id subtask not 3");
     }
 
-    @DisplayName("Возврат корректировки статуса после апдейта")
+    @DisplayName("Return correct status after update")
     @Test
     void shouldReturnNewIdTaskAfterUpdate() {
         Task testTask = manager.getTask(1);
@@ -47,21 +47,21 @@ class InMemoryTaskManagerTest {
         manager.updateEpic(testEpic);
 
         assertEquals(Status.DONE, manager.getTask(1).getStatus(),
-                "Обновление статуса для таска не работает");
+                "Update status for task not work");
         assertEquals(Status.IN_PROGRESS, manager.getEpic(2).getStatus(),
-                "Обновление статуса для эпика не работает");
+                "Update status for epic not work");
         assertEquals(Status.IN_PROGRESS, manager.getSubtask(3).getStatus(),
-                "Обновление статуса для подзадачи не работает");
+                "Update status for subtask not work");
     }
 
-    @DisplayName("Правильное удаление таска")
+    @DisplayName("Correct remove task")
     @Test
     void shouldBeNullTaskAfterRemoveTask() {
         manager.removeTask(1);
-        assertNull(manager.allTask.get(1), "Таск не удален");
+        assertNull(manager.allTask.get(1), "Task not removed");
     }
 
-    @DisplayName("Правильное удаление подзадачи")
+    @DisplayName("Correct remove subtask")
     @Test
     void shouldBeNullSubtaskAfterRemoveSubtask() {
         Subtask subtask = manager.getSubtask(3);
@@ -69,15 +69,15 @@ class InMemoryTaskManagerTest {
         Epic epic = manager.getEpic(subtask.getEpicId());
 
         manager.removeSubtask(3);
-        assertNull(manager.allSubtask.get(3), "Подзадача не удалена из всех подзадач");
-        assertFalse(manager.getSubtasksByEpic(epic).contains(subtask), "Подзадача не удалена из эпика");
+        assertNull(manager.allSubtask.get(3), "Subtask not removed from allSubtask");
+        assertFalse(manager.getSubtasksByEpic(epic).contains(subtask), "Subtask not removed from epic");
     }
 
-    @DisplayName("Правильное удаление эпика")
+    @DisplayName("Correct remove epic")
     @Test
     void shouldBeNullEpicAfterRemoveEpic() {
         manager.removeEpic(2);
-        assertNull(manager.getEpic(2), "Эпик не удален");
+        assertNull(manager.getEpic(2), "Epic not removed");
     }
 
 }
