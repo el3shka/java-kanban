@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    File fileInfoInManager;
+   private final File fileInfoInManager;
 
     public FileBackedTaskManager(HistoryManager historyManager, File file) {
         super(historyManager);
