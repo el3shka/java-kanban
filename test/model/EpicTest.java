@@ -16,7 +16,7 @@ class EpicTest {
     static void beforeAll() {
         epic = new Epic("a", "b");
         epic.setId(1);
-        subtask = new Subtask("z", "x", epic);
+        subtask = new Subtask("z", "x", 1);
         subtask.setId(2);
     }
 
@@ -28,7 +28,7 @@ class EpicTest {
         Assertions.assertEquals(epic, testEpic, "Эпики с одинаковым id не равны");
     }
 
-    @DisplayName("Эпик не может быть сабтаском")
+    @DisplayName("Epic not be subtask yourself")
     @Test
     void shouldFalseIfEpicIsSubtaskYourself() {
         epic.addSubtaskId(epic.getId());

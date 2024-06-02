@@ -14,7 +14,7 @@ class TaskTest {
         task.setId(1);
     }
 
-    @DisplayName("Таск с таким же id - существует")
+    @DisplayName("Задачи с одинаковыми ID - уже существуют")
     @Test
     void shouldBeEqualsTaskWithTheSameId() {
         Task testTask = new Task("z", "x");

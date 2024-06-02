@@ -19,16 +19,16 @@ class InMemoryTaskManagerTest {
         manager.createTask(task);
         Epic epic = new Epic("a", "b");
         manager.createEpic(epic);
-        Subtask subtask = new Subtask("a", "b", epic);
+        Subtask subtask = new Subtask("a", "b", epic.getId());
         manager.createSubtask(subtask);
     }
 
     @DisplayName("Return correct id")
     @Test
     void shouldReturnIdCreatedTasks() {
-        assertEquals(1, manager.getTask(1).getId(), "Id task not 1");
-        assertEquals(2, manager.getEpic(2).getId(), "Id epic not 2");
-        assertEquals(3, manager.getSubtask(3).getId(), "Id subtask not 3");
+        assertEquals(1, manager.getTask(1).getId(), "Id задачи не 1");
+        assertEquals(2, manager.getEpic(2).getId(), "Id эпика не 2");
+        assertEquals(3, manager.getSubtask(3).getId(), "Id подзадачи не 3");
     }
 
     @DisplayName("Return correct status after update")

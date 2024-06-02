@@ -35,9 +35,9 @@ class InMemoryHistoryManagerTest {
     @Test
     void shouldBeReturnArrayListChronologyHistory() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task("Task1", "Desc1");
-        Task task2 = new Task("Task2", "Desc2");
-        Task task3 = new Task("Task3", "Desc3");
+        Task task1 = new Task("Задача_1", "Описание_1");
+        Task task2 = new Task("Задача_2", "Описание_2");
+        Task task3 = new Task("Задача_3", "Описание_3");
         task1.setId(1);
         task2.setId(2);
         task3.setId(3);

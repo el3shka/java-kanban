@@ -3,9 +3,10 @@ package model;
 public class Subtask extends Task {
     private final int epicId;
 
-    public Subtask(String name, String description, Epic epic) {
+    public Subtask(String name, String description, int epicId) {
         super(name, description);
-        this.epicId = epic.getId();
+        this.epicId = epicId;
+        this.type = TaskType.SUBTASK;
     }
 
     @Override
@@ -17,5 +18,10 @@ public class Subtask extends Task {
 
     public int getEpicId() {
         return epicId;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "," + epicId;
     }
 }

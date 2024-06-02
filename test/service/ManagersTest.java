@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-
 class ManagersTest {
     @DisplayName("Return init and working InMemoryHistoryManager")
     @Test

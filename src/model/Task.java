@@ -8,10 +8,17 @@ public class Task {
     private int id;
     private Status status;
 
+    public TaskType getType() {
+        return type;
+    }
+
+    protected TaskType type;
+
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         status = Status.NEW;
+        this.type = TaskType.TASK;
     }
 
     @Override
@@ -29,12 +36,8 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "name='" + name + "'" +
-                ", description='" + description + "'" +
-                ", id='" + id + "'" +
-                ", status='" + status + "'" +
-                '}';
+        return String.join(",", Integer.toString(id),
+                type.toString(), name, status.toString(), description);
     }
 
     public void setId(int id) {

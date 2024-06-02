@@ -1,16 +1,23 @@
 import model.*;
-import service.InMemoryTaskManager;
+import service.FileBackedTaskManager;
 import service.Managers;
+import service.TaskManager;
+
+import java.io.File;
 
 public class Main {
-    private static InMemoryTaskManager manager;
+    private static FileBackedTaskManager manager;
 
     public static void main(String[] args) {
         System.out.println(">>> !!!!! СТАРТУЕМ !!!!! <<<");
 
-        manager = Managers.getDefault();
+        manager = Managers.getFileBackedTaskManager();
         addAllTask();
         printAllTasks();
+        File fileBackup = new File("resources/backup_output.csv");
+
+        TaskManager loadFromFileManager = FileBackedTaskManager.loadFromFile(fileBackup);
+        System.out.println(">>> !!!!! КОНЕЦ !!!!! <<<");
     }
 
     private static void addAllTask() {
@@ -23,8 +30,8 @@ public class Main {
         Epic goToShop = new Epic("Сходить в магазин", "Купить продукты");
         manager.createEpic(goToShop);
 
-        Subtask buyMilk = new Subtask("Купить молоко", "Молока нет", goToShop);
-        Subtask buyMeat = new Subtask("Купить мясо", "Кончилось мясо", goToShop);
+        Subtask buyMilk = new Subtask("Купить молоко", "Молока нет", 3);
+        Subtask buyMeat = new Subtask("Купить мясо", "Кончилось мясо", 3);
         manager.createSubtask(buyMilk);
         manager.createSubtask(buyMeat);
     }
@@ -39,7 +46,8 @@ public class Main {
             System.out.println(epic);
 
             for (Task task : manager.getSubtasksByEpic(epic)) {
-                System.out.println("======> " + task);
+
+                System.out.println("=====> " + task);
             }
         }
         System.out.println("Список подзадач:");
