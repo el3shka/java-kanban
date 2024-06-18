@@ -55,8 +55,7 @@ class FileBackedTaskManagerTest {
         manager.createSubtask(buyMilk);
         manager.createSubtask(buyMeat);
     }
-    }
-
+    
     private void addHistoryAllTasks(FileBackedTaskManager manager) {
         System.out.println("Список задач:");
         for (Task task : manager.getAllTasks()) {
