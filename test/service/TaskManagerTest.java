@@ -163,15 +163,15 @@ class TaskManagerTest {
     @DisplayName("Чек пересечений")
     @Test
     public void shouldCrossing() {
-        Epic epic = new Epic("Эпик", "Тест");
+        Epic epic = new Epic("Epic", "Test");
         epic.setId(1);
         taskManager.createEpic(epic);
-        Task testTask = new Task("Таск", "Тест", LocalDateTime.now(), Duration.ofHours(1));
+        Task testTask = new Task("Task", "Test", LocalDateTime.now(), Duration.ofHours(1));
         taskManager.createTask(testTask);
-        Task crossTask = new Task("Таск1", "Тест", LocalDateTime.now(), Duration.ofHours(1));
+        Task crossTask = new Task("Task1", "Test", LocalDateTime.now(), Duration.ofHours(1));
         assertThrows(CrossingTaskException.class, () -> taskManager.createTask(crossTask), "Таски пересекаются");
 
-        Subtask crossSubtask = new Subtask("Подзадача", "Тест", 1,
+        Subtask crossSubtask = new Subtask("Subtask", "Test", 1,
                 LocalDateTime.now(), Duration.ofDays(1));
         assertThrows(CrossingTaskException.class, () -> taskManager.createSubtask(crossSubtask));
 
@@ -181,12 +181,12 @@ class TaskManagerTest {
         crossSubtask.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(10)));
         assertThrows(CrossingTaskException.class, () -> taskManager.createSubtask(crossSubtask));
 
-        Task notCrossTask = new Task("Таск2", "Тест",
+        Task notCrossTask = new Task("Task2", "Test",
                 LocalDateTime.now().plus(Duration.ofDays(1)), Duration.ofMinutes(30));
         taskManager.createTask(notCrossTask);
         assertEquals(notCrossTask, taskManager.getTask(7));
 
-        Subtask notCrossSubtask = new Subtask("Подзадача", "Тест", 1,
+        Subtask notCrossSubtask = new Subtask("Subtask", "Test", 1,
                 LocalDateTime.now().plus(Duration.ofDays(2)), Duration.ofMinutes(50));
         taskManager.createSubtask(notCrossSubtask);
         assertEquals(notCrossSubtask, taskManager.getSubtask(8));
