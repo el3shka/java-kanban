@@ -7,18 +7,19 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+
 class ManagersTest {
-    @DisplayName("Return init and working InMemoryHistoryManager")
+    @DisplayName("Возврат инициализации и работы InMemoryHistoryManager")
     @Test
     void shouldBeReturnInitAndWorkInMemoryHistoryManager() {
         InMemoryHistoryManager historyManager = Managers.getHistoryManager();
         historyManager.add(new Task("A", "b"));
         List<Task> history = historyManager.getHistory();
         Assertions.assertEquals(1, history.size(),
-                "Manager return not working InMemoryHistoryManager");
+                "Менеджер вернул нерабочий InMemoryHistoryManager");
     }
 
-    @DisplayName("Return init and working InMemoryTaskManager")
+    @DisplayName("Возврат инициализации и работы InMemoryTaskManager")
     @Test
     void shouldBeReturnInitAndWorkInMemoryTaskManager() {
         InMemoryTaskManager testTaskManager = Managers.getDefault();
@@ -26,10 +27,10 @@ class ManagersTest {
         InMemoryTaskManager taskManager = new InMemoryTaskManager(historyManager);
 
         Assertions.assertEquals(testTaskManager.allTask, taskManager.allTask,
-                "Managers not return InMemoryTaskManager from getDefault");
+                "Managers не вернул InMemoryTaskManager из getDefault");
         Assertions.assertEquals(testTaskManager.allSubtask, taskManager.allSubtask,
-                "Managers not return InMemoryTaskManager from getDefault");
+                "Managers не вернул InMemoryTaskManager из getDefault");
         Assertions.assertEquals(testTaskManager.allEpics, taskManager.allEpics,
-                "Managers not return InMemoryTaskManager from getDefault");
+                "Managers не вернул InMemoryTaskManager из getDefault");
     }
 }

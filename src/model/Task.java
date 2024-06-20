@@ -1,5 +1,8 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -7,18 +10,48 @@ public class Task {
     private final String description;
     private int id;
     private Status status;
-
-    public TaskType getType() {
-        return type;
-    }
-
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    private Duration duration;
+    private LocalDateTime startTime;
     protected TaskType type;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         status = Status.NEW;
-        this.type = TaskType.TASK;
+        type = TaskType.TASK;
+        duration = null;
+        startTime = null;
+    }
+
+    public Task(String name, String description, LocalDateTime startTime, Duration duration) {
+        this.name = name;
+        this.description = description;
+        status = Status.NEW;
+        type = TaskType.TASK;
+        this.duration = duration;
+        this.startTime = startTime;
+
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public TaskType getType() {
+        return type;
     }
 
     @Override
@@ -36,8 +69,15 @@ public class Task {
 
     @Override
     public String toString() {
-        return String.join(",", Integer.toString(id),
-                type.toString(), name, status.toString(), description);
+        if (startTime != null && duration != null) {
+            return String.join(",", Integer.toString(id),
+                    type.toString(), name, status.toString(), description, startTime.format(dateTimeFormatter),
+                    Long.toString(duration.toMinutes()));
+        } else {
+            return String.join(",", Integer.toString(id),
+                    type.toString(), name, status.toString(), description, "null",
+                    "null");
+        }
     }
 
     public void setId(int id) {
