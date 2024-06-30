@@ -93,7 +93,7 @@ class HttpTaskServerTest {
 
             HttpResponse<String> responseNew = client.send(request, HttpResponse.BodyHandlers.ofString());
             assertEquals(500, responseNew.statusCode(), "Таск уже олреади!");
-            assertEquals(1, manager.getAllTasks().size(), "Таск уже олреади!");
+            assertEquals(1, manager.getAllTasks().size(), "Таск уже олреади получен!");
 
         } catch (IOException | InterruptedException ignored) {
         }
