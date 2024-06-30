@@ -54,25 +54,25 @@ class HttpTaskServerTest {
 
 
     public void addTasks() {
-        Task buySock = new Task("Купить носки в подарок", "Носков не нашлось :(");
+        Task buySock = new Task("Купить носки", "Закончились носки");
         manager.createTask(buySock);
 
-        Task makeDinner = new Task("Приготовить ужин", "Время ужина",
+        Task makeDinner = new Task("Сделать ужин", "Хочется кушать",
                 LocalDateTime.now().plus(Duration.ofDays(1)), Duration.ofHours(1));
         manager.createTask(makeDinner);
 
         Epic goToShop = new Epic("Сходить в магазин", "Купить продукты");
         manager.createEpic(goToShop);
 
-        Subtask buyMilk = new Subtask("Купить молоко", "Молока нет", 3,
+        Subtask buyMilk = new Subtask("Купить молоко", "Молоко кончается", 3,
                 LocalDateTime.now().plus(Duration.ofHours(5)), Duration.ofHours(5));
-        Subtask buyMeat = new Subtask("Купить мясо", "Кончилось мясо", 3,
+        Subtask buyMeat = new Subtask("Купить мясо", "Кончается мясо", 3,
                 LocalDateTime.now(), Duration.ofHours(3));
         manager.createSubtask(buyMilk);
         manager.createSubtask(buyMeat);
     }
 
-    @DisplayName("Добавляем таск")
+    @DisplayName("Add tasks")
     @Test
     public void shouldBeAddTasks() {
         URI uri = URI.create("http://localhost:8080/tasks");
@@ -88,27 +88,27 @@ class HttpTaskServerTest {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, response.statusCode(), "Добавляем таск Статус код");
-            assertEquals(testTask, manager.getTask(1), "Таск существует");
+            assertEquals(201, response.statusCode(), "Add task [status code]");
+            assertEquals(testTask, manager.getTask(1), "Task equals");
 
             HttpResponse<String> responseNew = client.send(request, HttpResponse.BodyHandlers.ofString());
-            assertEquals(500, responseNew.statusCode(), "Таск уже олреади!");
-            assertEquals(1, manager.getAllTasks().size(), "Таск уже олреади получен!");
+            assertEquals(500, responseNew.statusCode(), "The task is already there");
+            assertEquals(1, manager.getAllTasks().size(), "The task is already there");
 
         } catch (IOException | InterruptedException ignored) {
         }
     }
 
-    @DisplayName("Добавляем эпик и подзадачи")
+    @DisplayName("Add epic & subtasks")
     @Test
     public void shouldBeAddEpicAndSubtasks() {
         URI uriEpics = URI.create("http://localhost:8080/epics");
         URI uriSubtasks = URI.create("http://localhost:8080/subtasks");
         Epic epic = new Epic("epic", "test");
         epic.setId(1);
-        Subtask subtask1 = new Subtask("Подзадача1", "test", 1);
+        Subtask subtask1 = new Subtask("subtask1", "test", 1);
         subtask1.setId(2);
-        Subtask subtask2 = new Subtask("Подзадача2", "test", 1);
+        Subtask subtask2 = new Subtask("subtask2", "test", 1);
         subtask2.setId(3);
 
         String jsonEpic = gson.toJson(epic);
@@ -132,27 +132,27 @@ class HttpTaskServerTest {
 
         try {
             HttpResponse<String> responseEpic = client.send(requestEpic, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, responseEpic.statusCode(), "Добавляем эпик Статус код");
-            assertEquals(epic, manager.getEpic(1), "Эпик существует");
+            assertEquals(201, responseEpic.statusCode(), "Add epic [status code]");
+            assertEquals(epic, manager.getEpic(1), "Epic equals");
 
             HttpResponse<String> responseSubtask1 = client.send(requestSubtask1, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, responseSubtask1.statusCode(), "Добавляем подзадачу1 Статус код");
-            assertEquals(subtask1, manager.getSubtask(2), "Подзадача1 существует");
+            assertEquals(201, responseSubtask1.statusCode(), "Add subtask1 [status code]");
+            assertEquals(subtask1, manager.getSubtask(2), "Subtask1 equals");
 
             HttpResponse<String> responseSubtask2 = client.send(requestSubtask2, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, responseSubtask2.statusCode(), "Добавляем подзадачу2 Статус код");
-            assertEquals(subtask2, manager.getSubtask(3), "Подзадача2 существует");
+            assertEquals(201, responseSubtask2.statusCode(), "Add subtask2 [status code]");
+            assertEquals(subtask2, manager.getSubtask(3), "Subtask2 equals");
 
         } catch (IOException | InterruptedException ignored) {
         }
     }
 
-    @DisplayName("Обновялем таск")
+    @DisplayName("Update task")
     @Test
     public void shouldBeUpdateTask() {
         addTasks();
         URI uri = URI.create("http://localhost:8080/tasks/1");
-        Task buySock = new Task("Купить носки в подарок", "Носков не нашлось!");
+        Task buySock = new Task("Купить носки", "Закончились носки");
         buySock.setId(1);
         buySock.setStatus(Status.DONE);
 
@@ -164,18 +164,18 @@ class HttpTaskServerTest {
                 .build();
         try {
             HttpResponse<String> responseUpdate = client.send(requestUpdateTask, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, responseUpdate.statusCode(), "Обновляем тест статус код");
-            assertEquals(buySock, manager.getTask(1), "Обновляем тест таск");
+            assertEquals(201, responseUpdate.statusCode(), "Update test status code");
+            assertEquals(buySock, manager.getTask(1), "Update test task");
         } catch (IOException | InterruptedException ignored) {
         }
     }
 
-    @DisplayName("Обновляем подзадачу")
+    @DisplayName("Update subtask")
     @Test
     public void shouldBeUpdateSubtask() {
         addTasks();
         URI uri = URI.create("http://localhost:8080/subtasks/4");
-        Subtask subtask = new Subtask("Купить молоко", "Молока нет", 3,
+        Subtask subtask = new Subtask("Купить молоко", "Молоко кончается", 3,
                 LocalDateTime.now().plus(Duration.ofHours(5)), Duration.ofHours(5));
         subtask.setId(4);
         subtask.setStatus(Status.DONE);
@@ -188,14 +188,14 @@ class HttpTaskServerTest {
         try {
             HttpResponse<String> responseUpdate = client.send(requestUpdateTask, HttpResponse.BodyHandlers.ofString());
 
-            assertEquals(201, responseUpdate.statusCode(), "Обновляем подзадачу статус код");
+            assertEquals(201, responseUpdate.statusCode(), "Update subtask status code");
             assertEquals(subtask, manager.getSubtask(4), "Update subtask task");
-            assertEquals(Status.IN_PROGRESS, manager.getEpic(3).getStatus(), "Обновляем статус эпика");
+            assertEquals(Status.IN_PROGRESS, manager.getEpic(3).getStatus(), "Update epic status");
         } catch (IOException | InterruptedException ignored) {
         }
     }
 
-    @DisplayName("Обновляем эпик")
+    @DisplayName("Update epic")
     @Test
     public void shouldBeUpdateEpic() {
         addTasks();
@@ -212,13 +212,13 @@ class HttpTaskServerTest {
                 .build();
         try {
             HttpResponse<String> responseUpdate = client.send(requestUpdateTask, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, responseUpdate.statusCode(), "Обновляем статус код");
-            assertEquals(epic, manager.getEpic(3), "Обновляем эпик");
+            assertEquals(201, responseUpdate.statusCode(), "Update status code");
+            assertEquals(epic, manager.getEpic(3), "Update epic");
         } catch (IOException | InterruptedException ignored) {
         }
     }
 
-    @DisplayName("Удаляем таск")
+    @DisplayName("Delete task")
     @Test
     public void shouldBeDeleteTask() {
         addTasks();
@@ -230,13 +230,13 @@ class HttpTaskServerTest {
                 .build();
         try {
             HttpResponse<String> responseUpdate = client.send(requestDeleteTask, HttpResponse.BodyHandlers.ofString());
-            assertEquals(200, responseUpdate.statusCode(), "Удаление таска статус код");
+            assertEquals(200, responseUpdate.statusCode(), "Delete task status code");
             assertEquals(1, manager.getAllTasks().size());
         } catch (IOException | InterruptedException ignored) {
         }
     }
 
-    @DisplayName("Удаляем подзадачу")
+    @DisplayName("Delete subtask")
     @Test
     public void shouldBeDeleteSubtask() {
         addTasks();
@@ -248,13 +248,13 @@ class HttpTaskServerTest {
                 .build();
         try {
             HttpResponse<String> responseUpdate = client.send(requestDeleteTask, HttpResponse.BodyHandlers.ofString());
-            assertEquals(200, responseUpdate.statusCode(), "Удаление подзадачи статус код");
+            assertEquals(200, responseUpdate.statusCode(), "Delete subtask status code");
             assertEquals(1, manager.getAllSubtasks().size());
         } catch (IOException | InterruptedException ignored) {
         }
     }
 
-    @DisplayName("Удаление эпика")
+    @DisplayName("Delete epic")
     @Test
     public void shouldBeDeleteEpic() {
         addTasks();
@@ -267,14 +267,14 @@ class HttpTaskServerTest {
 
         try {
             HttpResponse<String> responseUpdate = client.send(requestDeleteEpic, HttpResponse.BodyHandlers.ofString());
-            assertEquals(200, responseUpdate.statusCode(), "Удаление подзадачи статус код");
-            assertEquals(0, manager.getAllEpics().size(), "Эпик удален");
-            assertEquals(0, manager.getAllSubtasks().size(), "Удалены все подзадачи эпика");
+            assertEquals(200, responseUpdate.statusCode(), "Delete subtask status code");
+            assertEquals(0, manager.getAllEpics().size(), "Delete epic");
+            assertEquals(0, manager.getAllSubtasks().size(), "Delete all subtask for epic");
         } catch (IOException | InterruptedException ignored) {
         }
     }
 
-    @DisplayName("Получение тасков")
+    @DisplayName("Get tasks")
     @Test
     public void shouldBeGetTaskAndTasks() {
         addTasks();
@@ -297,10 +297,10 @@ class HttpTaskServerTest {
             Task task = gson.fromJson(responseGetTask.body(), Task.class);
             List<Task> tasks = gson.fromJson(responseGetTasks.body(), new ListTasksTypeToken().getType());
 
-            assertEquals(200, responseGetTask.statusCode(), "Получение статус кода таска");
-            assertEquals(200, responseGetTasks.statusCode(), "Получение статус кода таска");
-            assertEquals(task, manager.getTask(1), "Получаем таск");
-            assertEquals(tasks, manager.getAllTasks(), "Получаем все таски");
+            assertEquals(200, responseGetTask.statusCode(), "Get task status code");
+            assertEquals(200, responseGetTasks.statusCode(), "Get tasks status code");
+            assertEquals(task, manager.getTask(1), "Get task");
+            assertEquals(tasks, manager.getAllTasks(), "Get all tasks");
         } catch (IOException | InterruptedException ignored) {
         }
     }
@@ -309,7 +309,7 @@ class HttpTaskServerTest {
 
     }
 
-    @DisplayName("Получение подзадач")
+    @DisplayName("Get subtasks")
     @Test
     public void shouldBeGetSubtasks() {
         addTasks();
@@ -340,13 +340,13 @@ class HttpTaskServerTest {
             List<Subtask> subtasksList = gson.fromJson(responseGetSubtasks.body(), new ListSubtasksTypeToken().getType());
             List<Subtask> epicSubtasksList = gson.fromJson(responseGetEpicSubtasks.body(), new ListSubtasksTypeToken().getType());
 
-            assertEquals(200, responseGetSubtask.statusCode(), "Получение статус кода подзадачи");
-            assertEquals(200, responseGetSubtasks.statusCode(), "Получение статус кода подзадачи");
-            assertEquals(200, responseGetEpicSubtasks.statusCode(), "Получение статус кода эпика");
+            assertEquals(200, responseGetSubtask.statusCode(), "Get subtask status code");
+            assertEquals(200, responseGetSubtasks.statusCode(), "Get subtasks status code");
+            assertEquals(200, responseGetEpicSubtasks.statusCode(), "Get epic subtasks status code");
 
-            assertEquals(subtask, manager.getSubtask(4), "Получение подзадачи");
-            assertEquals(subtasksList, manager.getAllSubtasks(), "Получаем все подзадачи");
-            assertEquals(epicSubtasksList, manager.getSubtasksByEpic(manager.getEpic(3)), "Получаем эпик подзадачи");
+            assertEquals(subtask, manager.getSubtask(4), "Get subtask");
+            assertEquals(subtasksList, manager.getAllSubtasks(), "Get all subtasks");
+            assertEquals(epicSubtasksList, manager.getSubtasksByEpic(manager.getEpic(3)), "Get epic subtasks");
         } catch (IOException | InterruptedException ignored) {
         }
     }
@@ -355,7 +355,7 @@ class HttpTaskServerTest {
 
     }
 
-    @DisplayName("Получаем эпики")
+    @DisplayName("Get epics")
     @Test
     public void shouldBeGetEpics() {
         addTasks();
@@ -378,10 +378,10 @@ class HttpTaskServerTest {
             Epic epic = gson.fromJson(responseGetEpic.body(), Epic.class);
             List<Task> epics = gson.fromJson(responseGetEpics.body(), new ListEpicsTypeToken().getType());
 
-            assertEquals(200, responseGetEpic.statusCode(), "Получаем статус код таска");
-            assertEquals(200, responseGetEpics.statusCode(), "Получаем статус код таска");
-            assertEquals(epic, manager.getEpic(3), "Получаем эпик");
-            assertEquals(epics, manager.getAllEpics(), "Получаем все эпики");
+            assertEquals(200, responseGetEpic.statusCode(), "Get task status code");
+            assertEquals(200, responseGetEpics.statusCode(), "Get tasks status code");
+            assertEquals(epic, manager.getEpic(3), "Get epic");
+            assertEquals(epics, manager.getAllEpics(), "Get all epics");
         } catch (IOException | InterruptedException ignored) {
         }
     }
@@ -390,7 +390,7 @@ class HttpTaskServerTest {
 
     }
 
-    @DisplayName("Получаем историю и приоритезированный список")
+    @DisplayName("Get history and prioritized list")
     @Test
     public void shouldBeGetHistory() {
         addTasks();
@@ -413,10 +413,10 @@ class HttpTaskServerTest {
             List<Task> history = gson.fromJson(responseGetHistory.body(), new ListTasksTypeToken().getType());
             List<Task> prioritized = gson.fromJson(responseGetPrioritized.body(), new ListTasksTypeToken().getType());
 
-            assertEquals(200, responseGetHistory.statusCode(), "Получаем статус код истории");
-            assertEquals(200, responseGetPrioritized.statusCode(), "Получаем приоритезированный статус код");
-            assertEquals(history, manager.historyManager.getHistory(), "Получаем историю");
-            assertEquals(prioritized, manager.getPriorityTask().values(), "Получаем приоритезацию");
+            assertEquals(200, responseGetHistory.statusCode(), "Get history status code");
+            assertEquals(200, responseGetPrioritized.statusCode(), "Get prioritized status code");
+            assertEquals(history, manager.historyManager.getHistory(), "Get history");
+            assertEquals(prioritized, manager.getPriorityTask().values(), "Get prioritized");
         } catch (IOException | InterruptedException ignored) {
         }
     }
