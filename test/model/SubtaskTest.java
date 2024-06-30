@@ -27,7 +27,7 @@ class SubtaskTest {
         Assertions.assertEquals(subtask, testSubtask, "Подзадачи с одинаковым id не равны");
     }
 
-    @DisplayName("Subtask id not be epic yourself id")
+    @DisplayName("Подзадача не может быть эпиком по id")
     @Test
     void shouldNotEqualsSubtaskIdAndEpicId() {
         subtask.setId(1);

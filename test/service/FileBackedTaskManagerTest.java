@@ -9,10 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
-
-
 class FileBackedTaskManagerTest {
-
 
     @DisplayName("Сохранение и загрузка в файл")
     @Test
@@ -26,7 +23,7 @@ class FileBackedTaskManagerTest {
             FileBackedTaskManager loadFromFileManager = FileBackedTaskManager.loadFromFile(fileTest);
 
             Assertions.assertEquals(manager.taskCounts, loadFromFileManager.taskCounts,
-                    "Error task count (generate id)");
+                    "Ошибка при подсчете задач (генерация id)");
             Assertions.assertEquals(manager.getAllEpics(), loadFromFileManager.getAllEpics(),
                     "Эпики не равны");
             Assertions.assertEquals(manager.getAllTasks(), loadFromFileManager.getAllTasks(),
@@ -41,7 +38,7 @@ class FileBackedTaskManagerTest {
         System.out.println("!!! >>>>> КОНЕЦ <<<<< !!!");
     }
 
-    private void addAllTask(FileBackedTaskManager manager) {
+     private void addAllTask(FileBackedTaskManager manager) {
         Task buySock = new Task("Купить носки в подарок", "Носков не нашлось :(");
         manager.createTask(buySock);
 

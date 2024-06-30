@@ -11,17 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
 
-    @DisplayName("HistoryManager don't change task")
+    @DisplayName("HistoryManager не изменил таск")
     @Test
     void shouldBeTaskInHistoryWithoutChanges() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
         Task task = new Task("a", "b");
         historyManager.add(task);
         List<Task> history = historyManager.getHistory();
-        assertEquals(task, history.get(0), "HistoryManager is not allowed to modify the task");
+        assertEquals(task, history.get(0), "HistoryManager не разрешено изменять таск");
     }
 
-    @DisplayName("Don't add duplicate")
+    @DisplayName("Дубли не добавлены")
     @Test
     void shouldBeReturnSize1IfAddTheSameTask() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
@@ -30,8 +30,8 @@ class InMemoryHistoryManagerTest {
         historyManager.add(task1);
         assertEquals(1, historyManager.getHistory().size());
     }
-
-    @DisplayName("Chronology list returned")
+       
+    @DisplayName("Получение хронологии")
     @Test
     void shouldBeReturnArrayListChronologyHistory() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
@@ -41,21 +41,20 @@ class InMemoryHistoryManagerTest {
         task1.setId(1);
         task2.setId(2);
         task3.setId(3);
-        historyManager.add(task1);             // head
-        historyManager.add(task2);             // medium
-        historyManager.add(task3);             // tail            [task1, task2, task3]
-        historyManager.remove(task1.getId());  // delete head     [task2, task3]
-        historyManager.add(task1);             // new tail        [task2, task3, task1]
-        historyManager.remove(task3.getId());  // delete medium   [task2, task1]
-        historyManager.add(task3);             // add tail        [task2, task1, task3]
-        historyManager.remove(task3.getId());  // remove tail     [task2, task1]
+        historyManager.add(task1);             // node.head
+        historyManager.add(task2);             // node.medium
+        historyManager.add(task3);             // node.tail            [task1, task2, task3]
+        historyManager.remove(task1.getId());  // delete node.head     [task2, task3]
+        historyManager.add(task1);             // new node.tail        [task2, task3, task1]
+        historyManager.remove(task3.getId());  // delete node.medium   [task2, task1]
+        historyManager.add(task3);             // add node.tail        [task2, task1, task3]
+        historyManager.remove(task3.getId());  // remove node.tail     [task2, task1]
         List<Task> histFromManager = historyManager.getHistory();
 
         List<Task> hist = new ArrayList<>();
         hist.add(task2);
         hist.add(task1);
         assertEquals(hist, histFromManager);
-
     }
 
 
