@@ -169,7 +169,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (task.getStartTime() != null) {
             if (isCrossing(task)) {
                 priorityTasks.put(task.getStartTime(), task);
-            } else throw new CrossingTaskException(String.format("Задача %и пересекаются", task.getId()));
+            } else throw new CrossingTaskException(String.format("Task %s is crossing", task.getId()));
 
         }
     }
@@ -178,7 +178,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void createSubtask(Subtask subtask) {
         Epic tempEpic = allEpics.get(subtask.getEpicId());
 
-        if (tempEpic == null) throw new NullTaskException("Null temp Эпик при создании подзадачи");
+        if (tempEpic == null) throw new NullTaskException("Null temp Эпик при создании подзадачи"); //RU lang problem...
 
         int id = generateId();
         subtask.setId(id);
@@ -190,7 +190,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (isCrossing(subtask)) {
                 priorityTasks.put(subtask.getStartTime(), subtask);
                 updateTimeAndDurationEpic(tempEpic);
-            } else throw new CrossingTaskException(String.format("Подзадача %и пересекаются", subtask.getId()));
+            } else throw new CrossingTaskException(String.format("Subtask %s is crossing", subtask.getId()));
 
         }
     }

@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
-
 class FileBackedTaskManagerTest {
-
 
     @DisplayName("Сохранение и загрузка в файл")
     @Test
@@ -54,7 +52,6 @@ class FileBackedTaskManagerTest {
         Subtask buyMeat = new Subtask("Купить мясо", "Кончилось мясо", 3);
         manager.createSubtask(buyMilk);
         manager.createSubtask(buyMeat);
-    }
     }
 
     private void addHistoryAllTasks(FileBackedTaskManager manager) {
