@@ -88,7 +88,7 @@ class HttpTaskServerTest {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, response.statusCode(), "Добавляем таск [status code]");
+            assertEquals(201, response.statusCode(), "Добавляем таск Статус код");
             assertEquals(testTask, manager.getTask(1), "Таск существует");
 
             HttpResponse<String> responseNew = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -132,15 +132,15 @@ class HttpTaskServerTest {
 
         try {
             HttpResponse<String> responseEpic = client.send(requestEpic, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, responseEpic.statusCode(), "Добавляем эпик [status code]");
+            assertEquals(201, responseEpic.statusCode(), "Добавляем эпик Статус код");
             assertEquals(epic, manager.getEpic(1), "Эпик существует");
 
             HttpResponse<String> responseSubtask1 = client.send(requestSubtask1, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, responseSubtask1.statusCode(), "Добавляем подзадачу1 [status code]");
+            assertEquals(201, responseSubtask1.statusCode(), "Добавляем подзадачу1 Статус код");
             assertEquals(subtask1, manager.getSubtask(2), "Подзадача1 существует");
 
             HttpResponse<String> responseSubtask2 = client.send(requestSubtask2, HttpResponse.BodyHandlers.ofString());
-            assertEquals(201, responseSubtask2.statusCode(), "Добавляем подзадачу2 [status code]");
+            assertEquals(201, responseSubtask2.statusCode(), "Добавляем подзадачу2 Статус код");
             assertEquals(subtask2, manager.getSubtask(3), "Подзадача2 существует");
 
         } catch (IOException | InterruptedException ignored) {
@@ -152,7 +152,7 @@ class HttpTaskServerTest {
     public void shouldBeUpdateTask() {
         addTasks();
         URI uri = URI.create("http://localhost:8080/tasks/1");
-        Task buySock = new Task("Купить носки в подарок", "Носков не нашлось :(");
+        Task buySock = new Task("Купить носки в подарок", "Носков не нашлось!");
         buySock.setId(1);
         buySock.setStatus(Status.DONE);
 
