@@ -1,7 +1,5 @@
 package server;
 
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.Headers;
@@ -70,14 +68,14 @@ class EpicsHandler implements HttpHandler {
                     String jsonEpic = gson.toJson(epic);
                     writeResponse(jsonEpic, exchange, 200);
                 } catch (NumberFormatException e) {
-                    writeResponse("ID Эпика должен быть INTEGER", exchange, 400);
+                    writeResponse("ID epic need to be Integer", exchange, 400);
                 } catch (NotFoundException e) {
-                    writeResponse("Эпик не найден", exchange, 404);
+                    writeResponse("EPIC not found", exchange, 404);
                 }
                 break;
             case 4:
                 if (!path[3].equals("subtasks")) {
-                    writeResponse("Некорректный запрос", exchange, 400);
+                    writeResponse("Bad or wrong request", exchange, 400);
                     break;
                 }
                 try {
@@ -86,11 +84,11 @@ class EpicsHandler implements HttpHandler {
                     String jsonSubtasks = gson.toJson(subtasks);
                     writeResponse(jsonSubtasks, exchange, 200);
                 } catch (NotFoundException ignored) {
-                    writeResponse("Эпик не найден", exchange, 404);
+                    writeResponse("EPIC not found", exchange, 404);
                 }
                 break;
             default:
-                writeResponse("Некорректный запрос", exchange, 400);
+                writeResponse("Bad or wrong request", exchange, 400);
         }
     }
 
@@ -102,7 +100,7 @@ class EpicsHandler implements HttpHandler {
             epic = gson.fromJson(jsonEpic, Epic.class);
 
         } catch (IOException e) {
-            writeResponse("Некорректный запрос", exchange, 400);
+            writeResponse("Bad or wrong request", exchange, 400);
             return;
         } catch (NullTaskException e) {
             writeResponse("Internal Server Error", exchange, 500);
@@ -117,27 +115,27 @@ class EpicsHandler implements HttpHandler {
                     writeResponse("Internal Server Error", exchange, 500);
                 } catch (NotFoundException e) {
                     manager.createEpic(epic);
-                    writeResponse("Эпик успешно создан", exchange, 201);
+                    writeResponse("Epic created with success", exchange, 201);
                 }
                 break;
             // update
             case 3:
                 try {
                     manager.updateEpic(epic);
-                    writeResponse("Обновление эпика успешно", exchange, 201);
+                    writeResponse("Epic updated with success", exchange, 201);
                 } catch (NullTaskException e) {
                     writeResponse("Internal Server Error", exchange, 500);
                 }
                 break;
             default:
-                writeResponse("Некорректный запрос", exchange, 400);
+                writeResponse("Bad or wrong request", exchange, 400);
         }
     }
 
     private void handlerDeleteEpics(HttpExchange exchange, String[] path) {
         try {
             manager.removeEpic(Integer.parseInt(path[2]));
-            writeResponse("Успешное удаление эпика", exchange, 200);
+            writeResponse("Successfully delete Epic", exchange, 200);
         } catch (NotFoundException ignored) {
         }
     }
